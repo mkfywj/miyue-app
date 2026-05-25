@@ -24,14 +24,13 @@ jobs:
 
       - name: 创建项目压缩包
         run: |
-          pwd
-          ls -la
-          zip -r ../miyue-project.zip . -x ".git/*" ".github/*"
-          ls -lh ../miyue-project.zip
+          mkdir -p /tmp/artifact
+          zip -r /tmp/artifact/miyue-project.zip . -x ".git/*" ".github/*"
+          ls -lh /tmp/artifact/miyue-project.zip
 
       - name: 上传项目源码
         uses: actions/upload-artifact@v4
         with:
           name: miyue-android-source
-          path: ../miyue-project.zip
+          path: /tmp/artifact/miyue-project.zip
           retention-days: 30
