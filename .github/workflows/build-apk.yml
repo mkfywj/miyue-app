@@ -1,0 +1,41 @@
+name: 蜜约 APK 云打包
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: '版本号 (如 1.0.1)'
+        required: false
+        default: '1.0.0'
+
+jobs:
+  build:
+    name: 打包安卓APK
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 显示项目结构
+        run: find . -type f | head -40
+
+      - name: 创建项目压缩包
+        run: |
+          # 只打包 client 目录
+          cd ..
+          cp -r client miyue-app
+          cd miyue-app
+          rm -rf .github
+          zip -r ../miyue-project.zip .
+          cd ..
+          ls -lh miyue-project.zip
+
+      - name: 上传项目源码
+        uses: actions/upload-artifact@v4
+        with:
+          name: miyue-android-source
+          path: miyue-project.zip
+          retention-days: 30
